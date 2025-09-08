@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
-    avtar: {
+    avatar: {
         type: String,
     },
     cartdata: {
