@@ -40,6 +40,7 @@ const Login = () => {
 
       {/* Google Sign Up */}
       <button
+        onClick={() => window.open("http://localhost:4000/api/auth/google", "_self")}
         type="button"
         className='flex items-center cursor-pointer gap-2 bg-white border border-gray-400 rounded-lg shadow px-4 py-2 w-full justify-center hover:bg-gray-100'
       >

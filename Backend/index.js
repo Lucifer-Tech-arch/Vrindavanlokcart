@@ -6,6 +6,7 @@ import configcloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userroutes.js";
 import productRouter from "./routes/productroute.js";
 import router from "./routes/authRoute.js";
+import './config/passport.js'
 
 // app config
 const app = express();

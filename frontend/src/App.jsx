@@ -16,6 +16,7 @@ import TermsConditions from './pages/TermsConditions'
 import Search from './components/Search'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Authsuccess from './pages/Authsuccess'
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path='/about' element={<About/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path='/auth-success' element={<Authsuccess />} />
         <Route path='/cart' element={<Cart />}/>
         <Route path='/orders' element={<Orders/>} />
         <Route path='/placeorder' element={<Placeorders/>} />

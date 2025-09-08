@@ -5,22 +5,23 @@ import User from '../models/usermodel.js';
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/google/callback"
+    callbackURL: "/api/auth/google/callback"
   },
   async(accessToken, refreshToken, profile, cb) => {
+    console.log(profile)
     try {
-       let user = await User.findOneAndUpdate({ googleId: profile.id },);
+       let user = await User.findOne({ googleId: profile.id },);
        if(!user) {
         user = await User.create({
             googleId: profile.id,
             username: profile.displayName,
-            email:profile.email[0].value,
+            email:profile.emails[0].value,
             avatar: profile.photos[0].value
         })
        }
-       return done(null, user);
+       return cb(null, user);
     } catch (error) {
-        return done(error,null);
+        return cb(error,null);
     }
     
   }
