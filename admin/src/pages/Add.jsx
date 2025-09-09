@@ -40,7 +40,7 @@ const Add = ({token}) => {
 
       const response = await axios.post(backendurl + "/api/product/add",formData, {headers: {token,"Content-Type": "multipart/form-data"}});
       if(response.data.success) {
-        toast.success(response.data.message)
+        toast.success(response.data.message, {autoClose: 2000});
         setname('');
         setdescription('');
         setimage1(false);
