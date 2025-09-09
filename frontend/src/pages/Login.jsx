@@ -1,12 +1,25 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { assests } from '../assets/assests';
+import {ShopContext} from '../context/ShopContext'
 
 const Login = () => {
 
   const [currentstate, setcurrentstate] = useState("Sign-up");
+  const {token,setToken, navigate, backendurl} = useContext(ShopContext);
+  const [name,setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [email,setEmail] = useState(''); 
 
   const onsubmithandler = async (e) => {
     e.preventDefault();
+    try {
+      if(currentstate === 'Sign-up') {
+        const response = await axios.post(backendurl + '/api/user/register', {name, email,password})
+        console.log(response.data);
+      }
+    } catch (error) {
+      
+    }
   }
   return (
     <form onSubmit={onsubmithandler} className='flex mt-[100px] flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
@@ -18,9 +31,9 @@ const Login = () => {
         </p>
       </div>
 
-      {currentstate === "Login" ? "" : <input type="text" className='w-full px-3 py-2 border border-gray-800' placeholder='Username' required />}
-      <input type="email" className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required />
-      <input type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
+      {currentstate === "Login" ? "" : <input type="text" className='w-full px-3 py-2 border border-gray-800'onChange={(e) => setName(e.target.value)} value={name} placeholder='Username' required />}
+      <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required />
+      <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
       <div className='w-full flex justify-between text-sm mt-[-8px]'>
         <p className='cursor-pointer hover:text-[#c2410c]'>Forgot Password?</p>
         {
