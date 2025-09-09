@@ -282,7 +282,7 @@ export const products = [
     {
         _id: 'aaaak',
         name: 'Tulsi- Phool Natural Incense Sticks',
-        description: "Tuberose Incense Sticks offer a bouquet of fragrances that is creamy and opulent with a touch of green freshness. The core ingredient in these sticks is the Tuberose essential oil, obtained from the blossoms of the Tuberose plant, ecologically known as Agave amica and originally native to Mexico Phool Tuberose Natural Incense Sticks are made from sacred temple flowers and pure essential oils",
+        description: "Tulsi- Phool Natural Incense SticksTuberose Incense Sticks offer a bouquet of fragrances that is creamy and opulent with a touch of green freshness. The core ingredient in these sticks is the Tuberose essential oil, obtained from the blossoms of the Tuberose plant, ecologically known as Agave amica and originally native to Mexico Phool Tuberose Natural Incense Sticks are made from sacred temple flowers and pure essential oils",
         price:165,
         image: [dhupbatti4,dhupbatti41,dhupbatti42,dhupbatti43,dhupbatti44],
         categories: "dhup batti",

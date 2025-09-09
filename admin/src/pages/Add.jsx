@@ -100,6 +100,7 @@ const Add = ({token}) => {
             <option value="Key Rings">Key Rings</option>
             <option value="Khatu Shaym">Khatu Shaym</option>
             <option value="Dhup Batti">Dhup Batti</option>
+            <option value="Durga Mata">Durga Mata</option>
           </select>
         </div>
         <div>
@@ -108,6 +109,7 @@ const Add = ({token}) => {
             <option value="Rose">Rose</option>
             <option value="Sandalwood">Sandalwood</option>
             <option value="Sheesham">Sheesham</option>
+            <option value="Brass">Brass</option>
             <option value="Steel">Steel</option>
             <option value="Gold">Gold</option>
             <option value="Silver">Silver</option>
