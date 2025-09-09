@@ -1,12 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { assests } from '../assets/assests';
 import {ShopContext} from '../context/ShopContext'
+import axios from 'axios'
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
-  const [currentstate, setcurrentstate] = useState("Sign-up");
+  const [currentstate, setcurrentstate] = useState("Login");
   const {token,setToken, navigate, backendurl} = useContext(ShopContext);
-  const [name,setName] = useState('');
+  const [username,setName] = useState('');
   const [password, setPassword] = useState('');
   const [email,setEmail] = useState(''); 
 
@@ -14,13 +16,36 @@ const Login = () => {
     e.preventDefault();
     try {
       if(currentstate === 'Sign-up') {
-        const response = await axios.post(backendurl + '/api/user/register', {name, email,password})
-        console.log(response.data);
+        const response = await axios.post(backendurl + '/api/user/register', {username, email,password})
+        if(response.data.success) {
+          setToken(response.data.token);
+          localStorage.setItem('token',response.data.token)
+        }
+        else{
+          toast.error(response.data.message, {autoClose: 2000});
+        }
+      }
+      else{
+        const response = await axios.post(backendurl + '/api/user/login',{email,password})
+        if(response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem("token",response.data.token);
+        }
+        else{
+          toast.error(response.data.message, {autoClose: 2000});
+        }
       }
     } catch (error) {
-      
+      console.log(error);
+      toast.error(error.message);
     }
   }
+
+  useEffect(() => {
+    if(token) {
+      navigate('/');
+    }
+  },[token])
   return (
     <form onSubmit={onsubmithandler} className='flex mt-[100px] flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
 
@@ -31,7 +56,7 @@ const Login = () => {
         </p>
       </div>
 
-      {currentstate === "Login" ? "" : <input type="text" className='w-full px-3 py-2 border border-gray-800'onChange={(e) => setName(e.target.value)} value={name} placeholder='Username' required />}
+      {currentstate === "Login" ? "" : <input type="text" className='w-full px-3 py-2 border border-gray-800'onChange={(e) => setName(e.target.value)} value={username} placeholder='Username' required />}
       <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required />
       <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
       <div className='w-full flex justify-between text-sm mt-[-8px]'>

@@ -21,7 +21,7 @@ const Hero = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: false,
+    arrows: true,
   };
   return (
    <div className="w-full relative pt-[100px]">

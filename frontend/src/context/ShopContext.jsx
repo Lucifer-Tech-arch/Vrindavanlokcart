@@ -92,16 +92,22 @@ const ShopContextProvider = (props) => {
                 setProducts(response.data.products);
             }
             else{
-                toast.error(response.data.message);
+                toast.error(response.data.message,{autoClose: 2000});
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.message);
+            toast.error(error.message, {autoClose: 2000});
         }
     }
 
     useEffect(() => {
         getproductdata();
+    },[])
+
+    useEffect(() => {
+        if(!token && localStorage.getItem('token')) {
+            setToken(localStorage.getItem('token'));
+        } 
     },[])
 
     const value = {

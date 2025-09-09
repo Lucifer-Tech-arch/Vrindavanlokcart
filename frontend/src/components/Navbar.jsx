@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { assests } from '../assets/assests'
-import { NavLink, Link, Navigate, } from 'react-router-dom'
+import { NavLink, Link, useNavigate, } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 
 const Navbar = () => {
     const [visible, setvisible] = useState(false);
     const { setshowsearch, cartcount } = useContext(ShopContext);
     const profilePic = localStorage.getItem("profilePic")
+    const token = localStorage.getItem("token");
+    const navigate = useNavigate();
     return (
         <div className='flex items-center justify-between py-1 pr-5 font-medium fixed top-0 left-0 pl-4 w-full z-50 flex items-center justify-between py-3 font-medium bg-white shadow-md '>
             <Link to='/'><img src={assests.logo} className='w-15' alt="" /></Link>
@@ -34,7 +36,7 @@ const Navbar = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" onClick={() => setshowsearch(true)} height="24px" viewBox="0 -960 960 960" width="24px" className='cursor-pointer mb-2' fill='#c2410c'><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg>
 
                 <div className="group relative">
-                    {profilePic ? (
+                    {profilePic && token ? (
                         <img
                             src={profilePic}
                             alt="profile"
@@ -54,24 +56,28 @@ const Navbar = () => {
                             </svg>
                         </Link>
                     )}
-
-                    <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+                    
+                    {token ? (
+                         <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
                         <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
                             <p className="cursor-pointer text-[#c2410c] hover:opacity-75">My Profile</p>
-                            <p className="cursor-pointer text-[#c2410c] hover:opacity-75">Orders</p>
+                            <p onClick={() => navigate('/orders')} className="cursor-pointer text-[#c2410c] hover:opacity-75">Orders</p>
                             <p
                                 className="cursor-pointer text-[#c2410c] hover:opacity-75"
                                 onClick={() => {
+                                    
                                     localStorage.removeItem("token");
                                     localStorage.removeItem("profilePic");
-                                    window.location.reload();
-                                    Navigate('/');
+                                    window.location.reload();   
+                                    navigate('/login') 
                                 }}
                             >
                                 Logout
                             </p>
                         </div>
                     </div>
+                    ):null}
+                    
                 </div>
 
                 <Link to='/cart' className='relative'>
