@@ -5,9 +5,6 @@ import Product from '../models/productmodel.js'
 const addProduct = async (req, res) => {
     try {
         const { name, description, price, categories, material, size, bestseller } = req.body;
-
-        console.log("req.files:", req.files);
-        console.log("req.body:", req.body);
         const image1 = req.files?.image1?.[0] || null;
         const image2 = req.files?.image2?.[0] || null;
         const image3 = req.files?.image3?.[0] || null;

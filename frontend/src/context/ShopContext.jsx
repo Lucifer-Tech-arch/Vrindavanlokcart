@@ -29,6 +29,15 @@ const ShopContextProvider = (props) => {
                 });
             }
 
+
+            if(token) {
+                try {
+                    axios.post(backendurl + '/api/cart/add', {itemId}, {headers: {token}});
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.message)
+                }
+            }
             return cartCopy;
         });
     };
@@ -80,6 +89,16 @@ const ShopContextProvider = (props) => {
             } else {
                 delete cartCopy[itemId];
             }
+            if(token) {
+               try {
+
+                axios.post(backendurl + '/api/cart/update', {itemId, quantity}, {headers: {token}});
+
+               } catch (error) {
+                 console.log(error);
+                 toast.error(error.message);
+               }
+            }
             return cartCopy;
         });
     };
@@ -100,6 +119,17 @@ const ShopContextProvider = (props) => {
         }
     }
 
+    const getusercart = async(token) => {
+        try {
+            const response = await axios.post(backendurl + '/api/cart/get',{},{headers: {token}});
+            if(response.data.success) {
+                setcartitems(response.data.cartdata);
+            }
+        } catch (error) {
+            
+        }
+    }
+
     useEffect(() => {
         getproductdata();
     },[])
@@ -107,6 +137,7 @@ const ShopContextProvider = (props) => {
     useEffect(() => {
         if(!token && localStorage.getItem('token')) {
             setToken(localStorage.getItem('token'));
+            getusercart(localStorage.getItem('token'));
         } 
     },[])
 
