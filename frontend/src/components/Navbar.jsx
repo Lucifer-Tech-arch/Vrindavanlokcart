@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { assests } from '../assets/assests'
 import { NavLink, Link, useNavigate, } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     const [visible, setvisible] = useState(false);
@@ -67,9 +68,12 @@ const Navbar = () => {
                                 onClick={() => {
                                     
                                     localStorage.removeItem("token");
-                                    localStorage.removeItem("profilePic");
-                                    window.location.reload();   
-                                    navigate('/login') 
+                                    localStorage.removeItem("profilePic");        
+                                    toast.success("Logged Out Successfully!", {autoClose: 2000});
+                                    setTimeout(() => {
+                                       navigate('/') 
+                                       window.location.reload();
+                                    },2000);
                                 }}
                             >
                                 Logout

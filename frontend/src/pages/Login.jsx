@@ -3,6 +3,7 @@ import { assests } from '../assets/assests';
 import {ShopContext} from '../context/ShopContext'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { IoMdEye,IoIosEyeOff } from "react-icons/io";
 
 const Login = () => {
 
@@ -11,6 +12,7 @@ const Login = () => {
   const [username,setName] = useState('');
   const [password, setPassword] = useState('');
   const [email,setEmail] = useState(''); 
+  const [showpassword, setShowPassword] = useState(false);
 
   const onsubmithandler = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ const Login = () => {
         if(response.data.success) {
           setToken(response.data.token);
           localStorage.setItem('token',response.data.token)
+          toast.success(`Welcome ${username}`)
         }
         else{
           toast.error(response.data.message, {autoClose: 2000});
@@ -58,9 +61,15 @@ const Login = () => {
 
       {currentstate === "Login" ? "" : <input type="text" className='w-full px-3 py-2 border border-gray-800'onChange={(e) => setName(e.target.value)} value={username} placeholder='Username' required />}
       <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required />
-      <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
+      <div className='relative w-full'>
+      <input type={showpassword ? "text": "password"} onChange={(e) => setPassword(e.target.value)} value={password} className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required />
+      <button className='absolute right-5 top-2 text-gray-500 text-2xl cursor-pointer' onClick={() => setShowPassword(prev => !prev)}>{!showpassword ? <IoMdEye />: <IoIosEyeOff />}</button>
+      </div>
       <div className='w-full flex justify-between text-sm mt-[-8px]'>
-        <p className='cursor-pointer hover:text-[#c2410c]'>Forgot Password?</p>
+        {
+          currentstate === "Sign-up" ? <p className='cursor-pointer hover:text-[#c2410c]'>Forgot Password?</p> : null
+        }
+  
         {
           currentstate === "Login"
             ? <p onClick={() => setcurrentstate("Sign-up")} className='cursor-pointer hover:text-[#c2410c]'>Dont have an account?</p>
