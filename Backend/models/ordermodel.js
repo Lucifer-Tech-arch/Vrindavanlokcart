@@ -24,7 +24,8 @@ const orderschema = new mongoose.Schema({
     },
     paymentmethod: {
         type: String,
-        required: true
+        required: true,
+        default: "cod"
     },
     payment: {
         type: Boolean,

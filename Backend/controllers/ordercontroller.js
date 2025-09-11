@@ -1,6 +1,31 @@
+import Order from "../models/ordermodel.js";
+import User from "../models/usermodel.js";
+
 //placing orders using COD
 const placeOrder = async(req,res) => {
+    try {
+        const {userId, items, amount, address} = req.body;
 
+        const orderData = {
+            userId,
+            items,
+            address,
+            amount,
+            paymentMethod: "COD",
+            payment: false,
+            date: Date.now()
+        }
+
+        const neworder = new Order(orderData);
+        await neworder.save();
+        await User.findByIdAndUpdate(userId, {cartdata: {}});
+
+        res.json({success: true, message: "Order Placed"});
+
+    } catch (error) {
+        console.log(error);
+        res.json({success: false, message: error.message});
+    }
 }
 
 //placing orders using Stripe Api
@@ -20,7 +45,15 @@ const allorders = async(req,res) => {
 
 //User Order Data for frontend
 const Userorderdata = async(req,res) => {
+    try {
+        const {userId} = req.body;
+        const orders = await Order.find({userId})
+        res.json({success: true, orders})
 
+    } catch (error) {
+        console.log(error);
+        res.json({success: false, message: error.message});
+    }
 }
 
 //update order status from admin pannel

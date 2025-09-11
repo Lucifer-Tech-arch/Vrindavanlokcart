@@ -8,6 +8,7 @@ import productRouter from "./routes/productroute.js";
 import router from "./routes/authRoute.js";
 import './config/passport.js'
 import cartRouter from "./routes/cartroute.js";
+import orderRouter from "./routes/orderroute.js";
 
 // app config
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/user",userRouter);
 app.use("/api/auth",router);
 app.use('/api/product',productRouter)
 app.use('/api/cart',cartRouter);
+app.use('/api/order',orderRouter);
 
 app.get("/",(req,res) => {
     res.send("Home Route");

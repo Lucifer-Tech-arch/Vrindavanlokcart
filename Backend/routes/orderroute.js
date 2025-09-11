@@ -11,4 +11,10 @@ orderRouter.post('/status',adminauth, updateStatus);
 
 //payment features
 orderRouter.post('/place',authUser,placeOrder);
-orderRouter.post('/',authUser)
+orderRouter.post('/stripe',authUser, placeOrderStrip)
+orderRouter.post('/razorpay', authUser, placeorderRazorpay)
+
+//User Features
+orderRouter.post('/userorders',authUser, Userorderdata)
+
+export default orderRouter
