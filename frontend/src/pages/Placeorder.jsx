@@ -50,28 +50,40 @@ const Placeorder = () => {
         items: orderitems,
         amount: getcartamount() + delivery_fee
       }
-      switch(method) {
-         
-        //API calls for cod
-        case 'cod': 
+      switch (method) {
 
-          const response = await axios.post(backendurl + '/api/order/place',orderData,{headers: {token}});
-          if(response.data.success) {
+        //API calls for cod
+        case 'cod':
+
+          const response = await axios.post(backendurl + '/api/order/place', orderData, { headers: { token } });
+          if (response.data.success) {
             setcartitems({});
             navigate('/orders')
           }
-          else{
+          else {
             toast.error(response.data.message);
           }
           break;
-          
-        default: 
+
+        case 'stripe':
+          const responsestripe = await axios.post(backendurl + '/api/order/stripe',orderData,{headers: {token}})
+          if(responsestripe.data.success) {
+            const {session_url} = responsestripe.data
+            window.location.replace(session_url);
+          }
+          else{
+            toast.error(responsestripe.data.message);
+          }
+          break;
+
+        default:
+
           break;
       }
 
     } catch (error) {
-        console.log(error);
-        toast.error(error.message);
+      console.log(error);
+      toast.error(error.message);
     }
 
   }

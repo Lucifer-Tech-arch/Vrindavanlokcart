@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { assests } from '../assets/assests'
 import { NavLink, Link, useNavigate, } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
@@ -7,9 +7,14 @@ import { toast } from 'react-toastify';
 const Navbar = () => {
     const [visible, setvisible] = useState(false);
     const { setshowsearch, cartcount } = useContext(ShopContext);
-    const profilePic = localStorage.getItem("profilePic")
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const [profilePic, setProfilePic] = useState(localStorage.getItem('profilePic'))
+
+    useEffect(() => {
+        setProfilePic(localStorage.getItem('profilePic'))
+    }, [token])
+
     return (
         <div className='flex items-center justify-between py-1 pr-5 font-medium fixed top-0 left-0 pl-4 w-full z-50 flex items-center justify-between py-3 font-medium bg-white shadow-md '>
             <Link to='/'><img src={assests.logo} className='w-15' alt="" /></Link>
@@ -40,7 +45,6 @@ const Navbar = () => {
                     {profilePic && token ? (
                         <img
                             src={profilePic}
-                            alt="profile"
                             className="w-8 h-8 rounded-full cursor-pointer"
                         />
                     ) : (
@@ -57,31 +61,32 @@ const Navbar = () => {
                             </svg>
                         </Link>
                     )}
-                    
+
                     {token ? (
-                         <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-                        <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
-                            <p className="cursor-pointer text-[#c2410c] hover:opacity-75">My Profile</p>
-                            <p onClick={() => navigate('/orders')} className="cursor-pointer text-[#c2410c] hover:opacity-75">Orders</p>
-                            <p
-                                className="cursor-pointer text-[#c2410c] hover:opacity-75"
-                                onClick={() => {
-                                    
-                                    localStorage.removeItem("token");
-                                    localStorage.removeItem("profilePic");        
-                                    toast.success("Logged Out Successfully!", {autoClose: 2000});
-                                    setTimeout(() => {
-                                       navigate('/') 
-                                       window.location.reload();
-                                    },2000);
-                                }}
-                            >
-                                Logout
-                            </p>
+                        <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+                            <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
+                                <p className="cursor-pointer text-[#c2410c] hover:opacity-75">My Profile</p>
+                                <p onClick={() => navigate('/orders')} className="cursor-pointer text-[#c2410c] hover:opacity-75">Orders</p>
+                                <p
+                                    className="cursor-pointer text-[#c2410c] hover:opacity-75"
+                                    onClick={() => {
+
+                                        localStorage.removeItem("token");
+                                        localStorage.removeItem("profilePic");
+                                        toast.success("Logged Out Successfully!", { autoClose: 2000 });
+                                        setTimeout(() => {
+                                            setProfilePic(null);
+                                            navigate('/')
+                                            window.location.reload();
+                                        }, 2000);
+                                    }}
+                                >
+                                    Logout
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    ):null}
-                    
+                    ) : null}
+
                 </div>
 
                 <Link to='/cart' className='relative'>
