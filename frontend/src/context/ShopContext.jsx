@@ -10,36 +10,42 @@ const ShopContextProvider = (props) => {
     const delivery_fee = 10;
     const backendurl = import.meta.env.VITE_BACKEND_URL;
     const [search, setsearch] = useState('');
-    const [products,setProducts] = useState([]);
+    const [products, setProducts] = useState([]);
     const [showsearch, setshowsearch] = useState(false);
     const [cartitems, setcartitems] = useState({});
-    const [token,setToken] = useState("")
+    const [token, setToken] = useState("");
     const navigate = useNavigate();
 
     // ✅ Add to Cart
     const addtocart = (itemId, showToast = true) => {
-        setcartitems((prevCart) => {
-            const cartCopy = { ...prevCart };
-            cartCopy[itemId] = (cartCopy[itemId] || 0) + 1;
+        if (token) {
+            setcartitems((prevCart) => {
+                const cartCopy = { ...prevCart };
+                cartCopy[itemId] = (cartCopy[itemId] || 0) + 1;
 
-            if (showToast) {
-                toast.success('Item added to cart!', {
-                    position: "top-right",
-                    autoClose: 2000,
-                });
-            }
-
-
-            if(token) {
-                try {
-                    axios.post(backendurl + '/api/cart/add', {itemId}, {headers: {token}});
-                } catch (error) {
-                    console.log(error);
-                    toast.error(error.message)
+                if (showToast) {
+                    toast.success('Item added to cart!', {
+                        position: "top-right",
+                        autoClose: 2000,
+                    });
                 }
-            }
-            return cartCopy;
-        });
+
+
+                if (token) {
+                    try {
+                        axios.post(backendurl + '/api/cart/add', { itemId }, { headers: { token } });
+                    } catch (error) {
+                        console.log(error);
+                        toast.error(error.message)
+                    }
+                }
+                return cartCopy;
+            });
+        }
+        else{
+            toast.error("Login to Add!",{autoClose: 2000});
+        }
+
     };
 
 
@@ -89,57 +95,57 @@ const ShopContextProvider = (props) => {
             } else {
                 delete cartCopy[itemId];
             }
-            if(token) {
-               try {
+            if (token) {
+                try {
 
-                axios.post(backendurl + '/api/cart/update', {itemId, quantity}, {headers: {token}});
+                    axios.post(backendurl + '/api/cart/update', { itemId, quantity }, { headers: { token } });
 
-               } catch (error) {
-                 console.log(error);
-                 toast.error(error.message);
-               }
+                } catch (error) {
+                    console.log(error);
+                    toast.error(error.message);
+                }
             }
             return cartCopy;
         });
     };
 
     //products data from backend api
-    const getproductdata = async() => {
+    const getproductdata = async () => {
         try {
-            const response = await axios.get(backendurl+ '/api/product/list')
-            if(response.data.success) {
+            const response = await axios.get(backendurl + '/api/product/list')
+            if (response.data.success) {
                 setProducts(response.data.products);
             }
-            else{
-                toast.error(response.data.message,{autoClose: 2000});
+            else {
+                toast.error(response.data.message, { autoClose: 2000 });
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.message, {autoClose: 2000});
+            toast.error(error.message, { autoClose: 2000 });
         }
     }
 
-    const getusercart = async(token) => {
+    const getusercart = async (token) => {
         try {
-            const response = await axios.post(backendurl + '/api/cart/get',{},{headers: {token}});
-            if(response.data.success) {
+            const response = await axios.post(backendurl + '/api/cart/get', {}, { headers: { token } });
+            if (response.data.success) {
                 setcartitems(response.data.cartdata);
             }
         } catch (error) {
-            
+
         }
     }
 
     useEffect(() => {
         getproductdata();
-    },[])
+    }, [])
 
     useEffect(() => {
-        if(!token && localStorage.getItem('token')) {
+        if (!token && localStorage.getItem('token')) {
             setToken(localStorage.getItem('token'));
             getusercart(localStorage.getItem('token'));
-        } 
-    },[])
+        }
+    }, [])
 
     const value = {
         products,
@@ -149,8 +155,8 @@ const ShopContextProvider = (props) => {
         showsearch, setshowsearch,
         cartitems,
         addtocart,
-        removefromcart,  
-        setcartitems, 
+        removefromcart,
+        setcartitems,
         backendurl,
         cartcount,
         updatequantity,

@@ -18,6 +18,7 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Authsuccess from './pages/Authsuccess'
 import Verify from './pages/Verify'
+import Scrolltotop from './components/Scrolltotop'
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
       <ToastContainer />
       <Navbar />
       <Search />
+      <Scrolltotop />
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/collection' element={<Collections/>} />

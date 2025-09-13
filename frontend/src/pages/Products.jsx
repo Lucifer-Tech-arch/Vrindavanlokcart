@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const Products = () => {
   const { productId } = useParams();
-  const { products, currency, addtocart, cartitems, navigate } = useContext(ShopContext);
+  const { products, currency, addtocart, cartitems, navigate, token } = useContext(ShopContext);
 
   const [productdata, setproductdata] = useState(false);
   const [image, setimage] = useState("");
@@ -27,20 +27,27 @@ const Products = () => {
   }, [productId, products]);
 
   const handleBuyNow = () => {
-    if (!productdata) return;
+    if (token) {
+      if (!productdata) return;
 
-    const isInCart = cartitems[productdata._id] && cartitems[productdata._id] > 0;
+      const isInCart = cartitems[productdata._id] && cartitems[productdata._id] > 0;
 
-    if (!isInCart) {
-      addtocart(productdata._id, false); // 👈 no toast here
+      if (!isInCart) {
+        addtocart(productdata._id, false); // 👈 no toast here
+      }
+
+      toast.info("Proceeding to checkout...", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      navigate("/placeorder");
+    }
+    else{
+      navigate('/login')
+      toast.error("Login to buy!", {autoClose: 2000})
     }
 
-    toast.info("Proceeding to checkout...", {
-      position: "top-right",
-      autoClose: 2000,
-    });
-
-    navigate("/placeorder");
   };
 
 
