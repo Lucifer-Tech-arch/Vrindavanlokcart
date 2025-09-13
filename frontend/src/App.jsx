@@ -14,9 +14,10 @@ import Footer from './components/Footer'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
 import Search from './components/Search'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Authsuccess from './pages/Authsuccess'
+import Verify from './pages/Verify'
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
         <Route path='/product/:productId' element={<Product/>} />
         <Route path='/privacypolicy' element={<PrivacyPolicy/>} />
         <Route path='/terms' element={<TermsConditions />} />
+        <Route path='/verify' element={<Verify />} />
       </Routes>
       <Footer />
     </div>

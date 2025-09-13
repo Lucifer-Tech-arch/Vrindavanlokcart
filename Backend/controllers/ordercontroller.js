@@ -19,7 +19,7 @@ const placeOrder = async(req,res) => {
             items,
             address,
             amount,
-            paymentMethod: "COD",
+            paymentmethod: "COD",
             payment: false,
             date: Date.now()
         }
@@ -47,7 +47,7 @@ const placeOrderStrip = async(req,res) => {
             items,
             address,
             amount,
-            paymentMethod: "Stripe",
+            paymentmethod: "Stripe",
             payment: false,
             date: Date.now()
         }
@@ -82,6 +82,24 @@ const placeOrderStrip = async(req,res) => {
         })
         res.json({success: true, session_url: session.url})
 
+    } catch (error) {
+        console.log(error);
+        res.json({success: false, message: error.message})
+    }
+}
+
+const veriyStripe = async(req,res) => {
+    const {orderId, success, userId} = req.body;
+    try {
+        if(success === 'true') {
+            await Order.findByIdAndUpdate(orderId, {payment: true, paymentmethod: "Stripe"});
+            await User.findByIdAndUpdate(userId, {cartdata: {}});
+            res.json({success: true});
+        }
+        else{
+            await Order.findByIdAndDelete(orderId);
+            res.json({success: false});
+        }
     } catch (error) {
         console.log(error);
         res.json({success: false, message: error.message})
@@ -129,4 +147,4 @@ const updateStatus = async(req,res) => {
     }
 }
 
-export {placeOrder, placeOrderStrip, placeorderRazorpay, allorders, updateStatus, Userorderdata}
+export {placeOrder,veriyStripe, placeOrderStrip, placeorderRazorpay, allorders, updateStatus, Userorderdata}
