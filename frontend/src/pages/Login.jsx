@@ -50,7 +50,7 @@ const Login = () => {
     }
   },[token])
   return (
-    <form onSubmit={onsubmithandler} className='flex mt-[100px] flex-col items-center w-[90%] p-5 sm:max-w-96 m-auto mt-14 gap-4 border border-gray-400 rounded-xl text-gray-800'>
+    <form onSubmit={onsubmithandler} className='flex mt-[100px] flex-col items-center w-[90%] p-5 sm:max-w-96 m-auto mt-14 gap-4 border border-gray-200 shadow-xl rounded-xl text-gray-800'>
 
       <div className='inline-flex text-center items-center gap-2 mb-2 mt-8'>
         <p className='prata-regular text-[#c2410c] text-3xl'>{currentstate}</p>

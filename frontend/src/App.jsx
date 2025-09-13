@@ -6,6 +6,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Cart from './pages/Cart'
+import Forgotpassword from './pages/Forgotpassword'
 import Orders from './pages/Orders'
 import Placeorders from './pages/Placeorder'
 import Product from './pages/Products'
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='/about' element={<About/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path='/forgot-password' element={<Forgotpassword/>} />
         <Route path='/auth/success' element={<Authsuccess />} />
         <Route path='/cart' element={<Cart />}/>
         <Route path='/orders' element={<Orders/>} />
