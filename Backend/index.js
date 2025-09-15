@@ -9,6 +9,7 @@ import router from "./routes/authRoute.js";
 import './config/passport.js'
 import cartRouter from "./routes/cartroute.js";
 import orderRouter from "./routes/orderroute.js";
+import reviewRouter from "./routes/reviewroute.js";
 
 // app config
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/auth",router);
 app.use('/api/product',productRouter)
 app.use('/api/cart',cartRouter);
 app.use('/api/order',orderRouter);
+app.use('/api/review',reviewRouter);
 
 app.get("/",(req,res) => {
     res.send("Home Route");

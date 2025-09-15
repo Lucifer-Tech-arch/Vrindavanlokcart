@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 import { assests } from '../assets/assests';
 import Relatedproducts from '../components/Relatedproducts';
+import Reviews from '../components/Reviews';
 import { toast } from 'react-toastify';
 
 const Products = () => {
   const { productId } = useParams();
-  const { products, currency, addtocart, cartitems, navigate, token } = useContext(ShopContext);
+  const { products, currency, addtocart, cartitems, navigate, token, backendurl } = useContext(ShopContext);
 
   const [productdata, setproductdata] = useState(false);
   const [image, setimage] = useState("");
@@ -33,7 +34,7 @@ const Products = () => {
       const isInCart = cartitems[productdata._id] && cartitems[productdata._id] > 0;
 
       if (!isInCart) {
-        addtocart(productdata._id, false); // 👈 no toast here
+        addtocart(productdata._id, false); 
       }
 
       toast.info("Proceeding to checkout...", {
@@ -49,7 +50,6 @@ const Products = () => {
     }
 
   };
-
 
   return productdata ? (
     <div className="pt-[100px] border-t-2 transition-opacity ease-in duration-500 opacity-100">
@@ -134,10 +134,11 @@ const Products = () => {
           </div>
         </div>
       </div>
-
+        <hr className='mt-6 border-gray-300 sm:w-4/5' />
       {/* Reviews section */}
       <div className="mt-10">
-        <b className="px-5 py-3 text-2xl text-[#c2410c]">Leave a Review</b>
+        <b className="px-5 py-3 text-2xl text-[#c2410c] font-medium">Give your reviews</b>
+        <Reviews productId = {productdata._id} />
       </div>
 
       {/* Related Products */}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext';
 import Title from '../components/Title';
 import ProductItem from '../components/ProductItem'
@@ -21,47 +21,43 @@ const Collections = () => {
     }
   }
 
-  const applyfilter = () => {
+  // Filtering
+const applyfilter = () => {
+  let productcopy = [...products];
 
-    let productcopy = products.slice();
-
-    if (search && showsearch) {
-      productcopy = productcopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
-    }
-
-    if (category.length > 0) {
-      productcopy = productcopy.filter(item => category.includes(item.categories));
-    }
-    setfilterproduct(productcopy);
+  if (search && showsearch) {
+    productcopy = productcopy.filter(item =>
+      item.name.toLowerCase().includes(search.toLowerCase())
+    );
   }
 
-
-  const sortproduct = () => {
-
-    let fpcopy = filterproduct.slice();
-
-    switch (sorttype) {
-      case "low-high":
-        setfilterproduct(fpcopy.sort((a, b) => (a.price - b.price)));
-        break;
-
-      case "high-low":
-        setfilterproduct(fpcopy.sort((a, b) => (b.price - a.price)));
-        break;
-
-      default:
-        applyfilter();
-        break;
-    }
+  if (category.length > 0) {
+    productcopy = productcopy.filter(item => category.includes(item.categories));
   }
 
-  useEffect(() => {
-    applyfilter();
-  }, [category, search, showsearch,products]);
+  setfilterproduct(productcopy);
+};
 
-  useEffect(() => {
-    sortproduct();
-  }, [sorttype]);
+// Sorting
+const sortproduct = () => {
+  let sorted = [...filterproduct];
+  if (sorttype === 'low-high') {
+    sorted.sort((a, b) => a.price - b.price);
+  } else if (sorttype === 'high-low') {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+  setfilterproduct(sorted);
+};
+
+// Effects
+useEffect(() => {
+  applyfilter();
+}, [category, search, showsearch, products]);
+
+useEffect(() => {
+  if (sorttype !== 'relavent') sortproduct();
+}, [sorttype, filterproduct]);
+
 
   return (
     <div className={`flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10  ${showsearch ? "pt-[5px]" : 'pt-[100px]'}`}>
@@ -90,22 +86,22 @@ const Collections = () => {
           <p className='mb-3 text-sm font-medium text-[#c2410c]'>CATEGORIES</p>
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'dhup batti'} onChange={togglecategory} name="" id="" />Dhup Batti
+              <input type="checkbox" className='w-3 cursor-pointer' value={'Dhup Batti'} checked={category.includes('Dhup Batti')} onChange={togglecategory} name="" id="" />Dhup Batti
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'key rings'} onChange={togglecategory} name="" id="" />Key Rings
+              <input type="checkbox" className='w-3 cursor-pointer' value={'Key Rings'} checked={category.includes('Key Rings')} onChange={togglecategory} name="" id="" />Key Rings
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'laddo gopal'} onChange={togglecategory} name="" id="" />Laddo Gopal
+              <input type="checkbox" className='w-3 cursor-pointer' value={'Laddo Gopal'} checked={category.includes('Laddo Gopal')} onChange={togglecategory} name="" id="" />Laddo Gopal
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'durga mata'} onChange={togglecategory} name="" id="" />Durga Mata
+              <input type="checkbox" checked={category.includes('Durga Mata')} className='w-3 cursor-pointer' value={'Durga Mata'} onChange={togglecategory} name="" id="" />Durga Mata
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'khatu shyam'} onChange={togglecategory} name="" id="" />Khatu Shyam
+              <input type="checkbox" className='w-3 cursor-pointer' checked={category.includes('Khatu Shyam')} value={'Khatu Shyam'} onChange={togglecategory} name="" id="" />Khatu Shyam
             </p>
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3 cursor-pointer' value={'ram darbar'} onChange={togglecategory} name="" id="" />Ram Darbar
+              <input type="checkbox" className='w-3 cursor-pointer' checked={category.includes('Ram Darbar')} value={'Ram Darbar'} onChange={togglecategory} name="" id="" />Ram Darbar
             </p>
 
           </div>

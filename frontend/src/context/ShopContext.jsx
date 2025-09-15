@@ -29,8 +29,6 @@ const ShopContextProvider = (props) => {
                         autoClose: 2000,
                     });
                 }
-
-
                 if (token) {
                     try {
                         axios.post(backendurl + '/api/cart/add', { itemId }, { headers: { token } });
@@ -45,9 +43,7 @@ const ShopContextProvider = (props) => {
         else{
             toast.error("Login to Add!",{autoClose: 2000});
         }
-
     };
-
 
     // ✅ Remove from Cart
     const removefromcart = (itemId) => {
@@ -97,7 +93,6 @@ const ShopContextProvider = (props) => {
             }
             if (token) {
                 try {
-
                     axios.post(backendurl + '/api/cart/update', { itemId, quantity }, { headers: { token } });
 
                 } catch (error) {
@@ -114,6 +109,7 @@ const ShopContextProvider = (props) => {
         try {
             const response = await axios.get(backendurl + '/api/product/list')
             if (response.data.success) {
+            
                 setProducts(response.data.products);
             }
             else {
