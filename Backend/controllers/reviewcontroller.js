@@ -1,33 +1,46 @@
+import mongoose from "mongoose";
 import Review from "../models/reviewmodel.js";
 
-const addReview = async(req,res) => {
+const addReview = async (req, res) => {
     try {
-        const {comment, rating, product} = req.body;
-        console.log(req.body)
-        console.log(req.user);
-        if(!comment || !rating) {
-            return res.json({success: false, message: "All fields are required!"})
+        const { comment, rating, product } = req.body;
+
+        if (!comment || !rating || !product) {
+            return res.status(400).json({ success: false, message: "All fields are required!" });
         }
-        const newreview =  new Review({comment, rating, author: req.user._id, product});
-        console.log("before saved")
+
+        if (!mongoose.Types.ObjectId.isValid(product)) {
+            return res.status(400).json({ success: false, message: "Invalid product ID" });
+        }
+
+        const newreview = new Review({
+            comment,
+            rating,
+            author: req.user._id,
+            product
+        });
+
         await newreview.save();
-        console.log("new review saved");
-        res.json({success: true, newreview})
-    } catch (error) {
-        console.log(error);
-        res.json({success: false, error: error.message});
-    } 
-}
+        await newreview.populate("author", "username");
 
-const showallreview = async(req,res) => {
-    try {
-        const allreview = await Review.find({product: req.params.productId}).populate("author", "name").sort({createdAt: -1});
-        res.json({success: true, allreview});
-        console.log("All review is listed");
+        res.status(201).json({ success: true, newreview });
     } catch (error) {
-        console.log(error);
-        res.json({success: false, error: error.message});
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
     }
-}
+};
 
-export {addReview, showallreview};
+const showallreview = async (req, res) => {
+    try {
+        const allreview = await Review.find({ product: req.params.productId })
+            .populate("author", "username")
+            .sort({ createdAt: -1 });
+
+        res.json({ success: true, allreview });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export { addReview, showallreview };

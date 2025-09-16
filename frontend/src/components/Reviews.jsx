@@ -111,15 +111,15 @@ const Reviews = ({ productId }) => {
         {reviews.length === 0 ? (
           <p className="text-gray-500">No reviews yet..</p>
         ) : (
-          <div className="space-y-4">
+          <div className= "flex gap-3">
             {reviews.map((rev, i) => (
               <div
                 key={i}
-                className="border border-gray-200 rounded-lg p-4 bg-gray-50"
+                className="border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-lg"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="font-medium text-sm text-gray-800">
-                    {rev.user?.name || rev.user || "Anonymous"}
+                  <div className="font-medium text-md text-gray-800">
+                    {rev.author?.username  || "Anonymous"}
                   </div>
                   <div className="flex">
                     {[1, 2, 3, 4, 5].map((star) => (
