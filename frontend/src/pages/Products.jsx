@@ -10,7 +10,7 @@ const Products = () => {
   const { productId } = useParams();
   const { products, currency, addtocart, cartitems, navigate, token, backendurl } = useContext(ShopContext);
 
-  const [productdata, setproductdata] = useState(false);
+  const [productdata, setproductdata] = useState(null);
   const [image, setimage] = useState("");
   const limit = 200;
 
@@ -25,6 +25,9 @@ const Products = () => {
 
   useEffect(() => {
     fetchproduct();
+    if(products && products.length > 0) {
+      fetchproduct();
+    }
   }, [productId, products]);
 
   const handleBuyNow = () => {

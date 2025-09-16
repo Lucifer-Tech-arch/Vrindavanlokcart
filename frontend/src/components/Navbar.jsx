@@ -3,6 +3,7 @@ import { assests } from '../assets/assests'
 import { NavLink, Link, useNavigate, } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 import { toast } from 'react-toastify';
+import { IoIosLogOut } from "react-icons/io";
 
 const Navbar = () => {
     const [visible, setvisible] = useState(false);
@@ -73,7 +74,7 @@ const Navbar = () => {
                                 <p className="cursor-pointer text-[#c2410c] hover:opacity-75">My Profile</p>
                                 <p onClick={() => navigate('/orders')} className="cursor-pointer text-[#c2410c] hover:opacity-75">Orders</p>
                                 <p
-                                    className="cursor-pointer text-[#c2410c] hover:opacity-75"
+                                    className="cursor-pointer text-[#c2410c] flex items-center hover:opacity-75"
                                     onClick={() => {
 
                                         localStorage.removeItem("token");
@@ -87,6 +88,7 @@ const Navbar = () => {
                                     }}
                                 >
                                     Logout
+                                    <IoIosLogOut className='ml-1 font-bold' />
                                 </p>
                             </div>
                         </div>

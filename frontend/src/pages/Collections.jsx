@@ -21,7 +21,6 @@ const Collections = () => {
     }
   }
 
-  // Filtering
 const applyfilter = () => {
   let productcopy = [...products];
 
@@ -38,7 +37,7 @@ const applyfilter = () => {
   setfilterproduct(productcopy);
 };
 
-// Sorting
+
 const sortproduct = () => {
   let sorted = [...filterproduct];
   if (sorttype === 'low-high') {
@@ -49,7 +48,7 @@ const sortproduct = () => {
   setfilterproduct(sorted);
 };
 
-// Effects
+
 useEffect(() => {
   applyfilter();
 }, [category, search, showsearch, products]);

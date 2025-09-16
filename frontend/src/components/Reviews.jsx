@@ -10,12 +10,9 @@ const Reviews = ({ productId }) => {
   const [comment, setComment] = useState("");
   const [reviews, setReviews] = useState([]);
 
-  // Fetch existing reviews
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${backendurl}/api/review/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(`${backendurl}/api/review/${productId}`);
       setReviews(res.data.allreview || []);
       setComment("");
       setRating(0);
@@ -43,14 +40,19 @@ const Reviews = ({ productId }) => {
     }
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${backendurl}/api/review`,
         { rating, comment, product: productId },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { token } }
       );
-
-      toast.success("Review added successfully!", { autoClose: 2000 });
-      fetchReviews(); // Refresh reviews list after submitting
+      if(response.data.success) {
+        toast.success("Review added successfully!", { autoClose: 2000 });
+        fetchReviews(); // Refresh reviews list after submitting
+      }
+      else{
+      toast.error(response.data.message, {autoClose: 2000});
+      }
+      
     } catch (err) {
       console.error(err);
       toast.error("Failed to add review", { autoClose: 2000 });
