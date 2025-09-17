@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { MdDelete } from "react-icons/md";
 
 const Reviews = ({ productId }) => {
   const { token, backendurl } = useContext(ShopContext);
@@ -10,9 +11,12 @@ const Reviews = ({ productId }) => {
   const [comment, setComment] = useState("");
   const [reviews, setReviews] = useState([]);
 
+  // Fetch reviews
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`${backendurl}/api/review/${productId}`);
+      const res = await axios.get(`${backendurl}/api/review/${productId}`, {
+        headers: token ? { token } : {} // optional auth header
+      });
       setReviews(res.data.allreview || []);
       setComment("");
       setRating(0);
@@ -45,17 +49,38 @@ const Reviews = ({ productId }) => {
         { rating, comment, product: productId },
         { headers: { token } }
       );
-      if(response.data.success) {
+      if (response.data.success) {
         toast.success("Review added successfully!", { autoClose: 2000 });
-        fetchReviews(); // Refresh reviews list after submitting
+        fetchReviews();
+      } else {
+        toast.error(response.data.message, { autoClose: 2000 });
       }
-      else{
-      toast.error(response.data.message, {autoClose: 2000});
-      }
-      
     } catch (err) {
       console.error(err);
       toast.error("Failed to add review", { autoClose: 2000 });
+    }
+  };
+
+  // Delete review
+  const handleDelete = async (reviewId) => {
+    if (!token) {
+      toast.error("Please login first", { autoClose: 2000 });
+      return;
+    }
+
+    try {
+      const res = await axios.delete(`${backendurl}/api/review/${reviewId}`, {
+        headers: { token },
+      });
+      if (res.data.success) {
+        toast.success("Review deleted!", { autoClose: 2000 });
+        fetchReviews();
+      } else {
+        toast.error(res.data.message || "Failed to delete", { autoClose: 2000 });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete review", { autoClose: 2000 });
     }
   };
 
@@ -111,36 +136,48 @@ const Reviews = ({ productId }) => {
         {reviews.length === 0 ? (
           <p className="text-gray-500">No reviews yet..</p>
         ) : (
-          <div className= "flex gap-3">
+          <div className="flex gap-3">
             {reviews.map((rev, i) => (
               <div
                 key={i}
                 className="border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-lg"
               >
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="font-medium text-md text-gray-800">
-                    {rev.author?.username  || "Anonymous"}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="font-medium text-md text-gray-800">
+                      {rev.author?.username || "Anonymous"}
+                    </div>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <svg
+                          key={star}
+                          className="w-4 h-4"
+                          fill={star <= rev.rating ? "#facc15" : "none"}
+                          viewBox="0 0 24 24"
+                          stroke="#facc15"
+                          strokeWidth="2"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M11.48 3.5l2.25 4.56 5.02.73-3.64 3.55.86 5-4.49-2.36-4.49 2.36.86-5-3.64-3.55 5.02-.73 2.25-4.56z"
+                          />
+                        </svg>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg
-                        key={star}
-                        className="w-4 h-4"
-                        fill={star <= rev.rating ? "#facc15" : "none"}
-                        viewBox="0 0 24 24"
-                        stroke="#facc15"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M11.48 3.5l2.25 4.56 5.02.73-3.64 3.55.86 5-4.49-2.36-4.49 2.36.86-5-3.64-3.55 5.02-.73 2.25-4.56z"
-                        />
-                      </svg>
-                    ))}
-                  </div>
+
+                  {rev.canDelete && (
+                    <button
+                      onClick={() => handleDelete(rev._id)}
+                      className="cursor-pointer text-red-500 hover:text-red-700"
+                    >
+                      <MdDelete size={20} />
+                    </button>
+                  )}
                 </div>
-                <p className="text-sm text-gray-700">{rev.comment}</p>
+
+                <p className="text-sm text-gray-700 mt-2">{rev.comment}</p>
                 <p className="text-xs text-gray-400 mt-1">
                   {new Date(rev.createdAt).toLocaleDateString()}
                 </p>
