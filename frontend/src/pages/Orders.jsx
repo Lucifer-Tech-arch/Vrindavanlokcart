@@ -4,6 +4,7 @@ import Title from '../components/Title';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios'
+import { toast } from 'react-toastify';
 
 const Orders = () => {
   const { backendurl, currency, token } = useContext(ShopContext);
@@ -31,7 +32,8 @@ const Orders = () => {
         setorderdata(allorderitems.reverse());
       }
     } catch (error) {
-
+        console.log(error);
+        toast.error(error.message, {autoClose: 2000})
     }
   }
 

@@ -12,7 +12,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET);
 //placing orders using COD
 const placeOrder = async(req,res) => {
     try {
-        const {userId, items, amount, address} = req.body;
+        const {items, amount, address} = req.body;
+        const userId = req.user._id;
 
         const orderData = {
             userId,
@@ -25,6 +26,7 @@ const placeOrder = async(req,res) => {
         }
 
         const neworder = new Order(orderData);
+        console.log(neworder);
         await neworder.save();
         await User.findByIdAndUpdate(userId, {cartdata: {}});
 
@@ -39,8 +41,9 @@ const placeOrder = async(req,res) => {
 //placing orders using Stripe Api
 const placeOrderStrip = async(req,res) => {
     try {
-        const {userId, items, amount, address} = req.body
+        const {items, amount, address} = req.body
         const {origin} = req.headers;
+        const userId = req.user._id;
 
         const orderData = {
             userId,
@@ -51,7 +54,9 @@ const placeOrderStrip = async(req,res) => {
             payment: false,
             date: Date.now()
         }
+        
         const neworder = new Order(orderData);
+        console.log(neworder);
         await neworder.save();
 
         const line_items = items.map((item) => ({
@@ -106,11 +111,6 @@ const veriyStripe = async(req,res) => {
     }
 }
 
-//placing orders using Razor pay
-const placeorderRazorpay = async(req,res) => {
-
-}
-
 //All orders data for Admin Pannel
 const allorders = async(req,res) => {
     try {
@@ -125,7 +125,7 @@ const allorders = async(req,res) => {
 //User Order Data for frontend
 const Userorderdata = async(req,res) => {
     try {
-        const {userId} = req.body;
+        const userId = req.user._id;
         const orders = await Order.find({userId})
         res.json({success: true, orders})
 
@@ -147,4 +147,4 @@ const updateStatus = async(req,res) => {
     }
 }
 
-export {placeOrder,veriyStripe, placeOrderStrip, placeorderRazorpay, allorders, updateStatus, Userorderdata}
+export {placeOrder,veriyStripe, placeOrderStrip, allorders, updateStatus, Userorderdata}

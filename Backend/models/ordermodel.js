@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const orderschema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
         required: true
     },
     items: {
@@ -34,7 +35,8 @@ const orderschema = new mongoose.Schema({
     },
     date: {
         type: Number,
-        required: true
+        required: true,
+        default: Date.now
     }
 })
 

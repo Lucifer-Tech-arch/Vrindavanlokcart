@@ -79,17 +79,30 @@ const updatecart = async (req, res) => {
 };
 
 //get user cart data
-const getusercart = async (req, res) => {
-   try {
-     let {userId} = req.body;
-     const userdata = await User.findById(userId);
-     let cartdata = userdata.cartdata;
+import mongoose from "mongoose";
 
-     res.json({success: true, cartdata})
-   } catch (error) {
-      console.log(error);
-      res.json({success: false, message: error.message});
-   }
-}
+const getusercart = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID" });
+    }
+
+    const userdata = await User.findById(userId);
+
+    if (!userdata) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const cartdata = userdata.cartdata || {};  // fallback empty object
+
+    return res.status(200).json({ success: true, cartdata });
+  } catch (error) {
+    console.error("Get cart error:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 
 export { addtocart, updatecart, getusercart };
