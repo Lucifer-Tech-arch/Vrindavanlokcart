@@ -36,9 +36,9 @@ app.use('/api/order',orderRouter);
 app.use('/api/review',reviewRouter);
 
 app.get("/",(req,res) => {
-    res.send("Home Route");
+  res.send("Home Route");
 })
 
 app.listen(port, () => {
-    console.log("Server running on PORT: "+port);
+  console.log("Server running on PORT: "+port);
 })
