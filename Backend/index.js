@@ -14,7 +14,7 @@ import reviewRouter from "./routes/reviewroute.js";
 // app config
 const app = express();
 
-const port = process.env.PORT || 4000;
+//const port = process.env.PORT || 4000;
 
 connectdb();
 configcloudinary();
@@ -39,6 +39,8 @@ app.get("/",(req,res) => {
   res.send("Home Route");
 })
 
-app.listen(port, () => {
+/*app.listen(port, () => {
   console.log("Server running on PORT: "+port);
-})
+})*/
+
+export default app;
