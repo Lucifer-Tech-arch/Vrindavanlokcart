@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
+import { useTransition } from "react";
 
 const Reviews = ({ productId }) => {
   const { token, backendurl } = useContext(ShopContext);
@@ -10,6 +11,7 @@ const Reviews = ({ productId }) => {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [pending, setPending] = useState(false);
 
   // Fetch reviews
   const fetchReviews = async () => {
@@ -30,10 +32,10 @@ const Reviews = ({ productId }) => {
     if (productId) fetchReviews();
   }, [productId]);
 
+
   // Submit new review
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!token) {
       toast.error("Please login to submit review", { autoClose: 2000 });
       return;
@@ -42,7 +44,7 @@ const Reviews = ({ productId }) => {
       toast.error("Please add both rating and comment", { autoClose: 2000 });
       return;
     }
-
+    setPending(true)
     try {
       const response = await axios.post(
         `${backendurl}/api/review`,
@@ -58,6 +60,9 @@ const Reviews = ({ productId }) => {
     } catch (err) {
       console.error(err);
       toast.error("Failed to add review", { autoClose: 2000 });
+    }
+    finally{
+      setPending(false);
     }
   };
 
@@ -120,10 +125,10 @@ const Reviews = ({ productId }) => {
           />
 
           <button
-            type="submit"
+            type="submit" disabled={pending}
             className="self-start px-6 py-2 cursor-pointer text-white rounded-lg text-sm font-medium bg-[#c2410c]"
           >
-            Add Review
+            {pending? "Adding Review...": "Add Review"}
           </button>
         </form>
       </div>
