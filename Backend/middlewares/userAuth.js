@@ -5,7 +5,8 @@ const authUser = async (req, res, next) => {
   const { token } = req.headers;
 
   if (!token) {
-    return res.json({ success: false, message: "Not Authorized. Login Again!" });
+    req.user = null;
+    return next();
   }
 
   try {
@@ -16,11 +17,11 @@ const authUser = async (req, res, next) => {
       return res.json({ success: false, message: "User not found" });
     }
 
-    req.user = user; // ✅ now you can use req.user._id and req.user.username
+    req.user = user || null; // ✅ now you can use req.user._id and req.user.username
     next();
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    req.user = null
   }
 };
 

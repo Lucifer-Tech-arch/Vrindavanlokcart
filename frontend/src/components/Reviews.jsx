@@ -75,7 +75,7 @@ const Reviews = ({ productId }) => {
 
     try {
       const res = await axios.delete(`${backendurl}/api/review/${reviewId}`, {
-        headers: { token },
+        headers: token ?{ token }: {},
       });
       if (res.data.success) {
         toast.success("Review deleted!", { autoClose: 2000 });

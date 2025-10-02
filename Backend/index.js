@@ -36,8 +36,13 @@ app.use('/api/order',orderRouter);
 app.use('/api/review',reviewRouter);
 
 app.get("/",(req,res) => {
-  res.send("Home Route");
+  res.send("Welcome to Vrindavan Lok-Cart");
 })
+
+app.use((req,res)=> {
+  res.status(404).send("Oops... No such Path exists! -> Continue with vrindavan lok cart")
+})
+
 
 /*app.listen(port, () => {
   console.log("Server running on PORT: "+port);

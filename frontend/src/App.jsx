@@ -20,6 +20,7 @@ import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Authsuccess from './pages/Authsuccess'
 import Verify from './pages/Verify'
+import ChatBot from './components/ChatBot'
 import Scrolltotop from './components/Scrolltotop'
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
         <Route path='/terms' element={<TermsConditions />} />
         <Route path='/verify' element={<Verify />} />
       </Routes>
+      <ChatBot />
       <Footer />
     </div>
   )

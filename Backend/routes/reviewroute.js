@@ -5,7 +5,7 @@ import userAuth from '../middlewares/userAuth.js'
 const reviewRouter = express.Router();
 
 reviewRouter.post('/',userAuth,addReview);
-reviewRouter.post('/:reviewid',userAuth, deletereview);
+reviewRouter.delete('/:reviewid',userAuth, deletereview);
 reviewRouter.get('/:productId',showallreview);
 
 export default reviewRouter

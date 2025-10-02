@@ -33,25 +33,25 @@ const addReview = async (req, res) => {
 
 // ------------------- Show All Reviews -------------------
 const showallreview = async (req, res) => {
-    try {
-        const allreview = await Review.find({ product: req.params.productId })
-            .populate("author", "username _id")
-            .sort({ createdAt: -1 });
+  try {
+    const allreview = await Review.find({ product: req.params.productId })
+      .populate("author", "username _id")
+      .sort({ createdAt: -1 });
 
-        const userId = req.user?._id?.toString();
+    const userId = req.user ? req.user._id.toString() : null;
 
-        // Add canDelete field for frontend
-        const mapped = allreview.map((rev) => ({
-            ...rev.toObject(),
-            canDelete: userId && rev.author?._id.toString() === userId
-        }));
+    const mapped = allreview.map((rev) => ({
+      ...rev.toObject(),
+      canDelete: userId && rev.author?._id.toString() === userId
+    }));
 
-        res.json({ success: true, allreview: mapped });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+    res.json({ success: true, allreview: mapped });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 };
+
 
 // ------------------- Delete Review -------------------
 const deletereview = async (req, res) => {
